@@ -1,6 +1,6 @@
 # fishingtime
 
-A new Flutter project.
+A truly awesome Flutter project.
 
 ## Getting Started
 
