@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:fishingtime/models/setting.dart';
+import 'package:fishingtime/pages/circle_clock.dart';
 import 'package:fishingtime/pages/default_clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,11 +26,13 @@ class _ClockOptionPageState extends State<ClockOptionPage> {
       //
       _clocks = [
         new DefaultClock(),
+        new CircleClock(),
       ];
       _clocksKey = [
         DefaultClock.KEY,
+        CircleClock.KEY,
       ];
-      _clocksName = ["Default", "AnalogClock", "AntsClock"];
+      _clocksName = ["Default", "CircleClock"];
     });
     super.initState();
   }

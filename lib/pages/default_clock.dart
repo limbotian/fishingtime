@@ -158,15 +158,20 @@ class _DefaultClockState extends State<DefaultClock> {
       _isShowDate = _setting.isShowDate;
       _custText = _setting.custText;
       if (_setting.isOLed &&
-          int.parse(_time[2]) <= 5 &&
+          _time[1].indexOf('5') != -1 &&
+          int.parse(_time[2]) <= 3 &&
           int.parse(_time[2]) >= 0) {
         _backgroundColor = Colors.black;
         _cardColor = Colors.black;
+        _clockFontStyle = TextStyle(
+            color: Colors.white,
+            fontSize: ScreenUtil().setSp(200),
+            fontFamily: _setting.dFClockFontFamily);
       }
     });
 
     return GestureDetector(
-      onTap: () async {
+      onDoubleTap: () async {
         await Navigator.push(context, CustomRouteZoom(DefaultClockSetting()));
       },
       child: Stack(
@@ -181,29 +186,30 @@ class _DefaultClockState extends State<DefaultClock> {
             ),
           ),
           Container(
-              margin:
-                  EdgeInsets.all(_setting.isOLed ? double.parse(_time[2]) : 50),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _date,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
-                      fontFamily: _setting.dFClockFontFamily,
-                      color: _clockFontStyle.color,
-                    ),
+            margin: EdgeInsets.all(
+                _setting.isOLed ? double.parse(_time[2]) + 10 : 50),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  _date,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(26),
+                    fontFamily: _setting.dFClockFontFamily,
+                    color: _clockFontStyle.color,
                   ),
-                  Text(
-                    _custText,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(23),
-                      fontFamily: _setting.dFClockFontFamily,
-                      color: _clockFontStyle.color,
-                    ),
+                ),
+                Text(
+                  _custText,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(23),
+                    fontFamily: _setting.dFClockFontFamily,
+                    color: _clockFontStyle.color,
                   ),
-                ],
-              ))
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

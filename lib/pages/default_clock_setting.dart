@@ -16,7 +16,7 @@ class _DefaultClockSettingState extends State<DefaultClockSetting> {
   TextStyle _textStyle;
   TextStyle _subTextStyle = Constants.SUB_TITLE_STYLE;
   Setting _setting;
-  List _colors = new List(3);
+  List _colors = new List(1);
   Color pickerColor = Color(0xff443a49);
 
   @override
@@ -48,14 +48,6 @@ class _DefaultClockSettingState extends State<DefaultClockSetting> {
               setState(() {
                 switch (index) {
                   case 0:
-                    _setting.dFBackgroundColor = pickerColor.value;
-                    _setting.dFBackgroundOpacity = pickerColor.opacity;
-                    break;
-                  case 1:
-                    _setting.dFTextColor = pickerColor.value;
-                    _setting.dFTextOpacity = pickerColor.opacity;
-                    break;
-                  case 2:
                     _setting.dFCardColor = pickerColor.value;
                     _setting.dFCardOpacity = pickerColor.opacity;
                     break;
@@ -76,10 +68,6 @@ class _DefaultClockSettingState extends State<DefaultClockSetting> {
     setState(() {
       _colors[0] = Color(_setting.dFBackgroundColor)
           .withOpacity(_setting.dFBackgroundOpacity);
-      _colors[1] =
-          Color(_setting.dFTextColor).withOpacity(_setting.dFTextOpacity);
-      _colors[2] =
-          Color(_setting.dFCardColor).withOpacity(_setting.dFCardOpacity);
     });
 
     return Scaffold(
@@ -98,70 +86,6 @@ class _DefaultClockSettingState extends State<DefaultClockSetting> {
                 children: [
                   SettingCardItem(
                     child: ListTile(
-                      leading: Icon(Icons.format_color_reset),
-                      title: Text(
-                        '颜色跟随主题',
-                        style: _textStyle,
-                      ),
-                      trailing: new Switch(
-                          value: _setting.colorWithTheme,
-                          onChanged: (bool newValue) {
-                            setState(() {
-                              _setting.colorWithTheme = newValue;
-                            });
-                          }),
-                    ),
-                  ),
-                  SettingCardItem(
-                    child: ListTile(
-                      leading: Icon(Icons.wallpaper),
-                      title: Text(
-                        '背景颜色',
-                        style: _textStyle,
-                      ),
-                      subtitle: Text(
-                        '#' +
-                            _setting.dFBackgroundColor
-                                .toRadixString(16)
-                                .toUpperCase(),
-                        style: _subTextStyle,
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_right,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () {
-                        _showColorChooseDialog(0);
-                      },
-                      enabled: !_setting.colorWithTheme,
-                    ),
-                  ),
-                  SettingCardItem(
-                    child: ListTile(
-                      leading: Icon(Icons.text_fields),
-                      title: Text(
-                        '文字颜色',
-                        style: _textStyle,
-                      ),
-                      subtitle: Text(
-                        '#' +
-                            _setting.dFTextColor
-                                .toRadixString(16)
-                                .toUpperCase(),
-                        style: _subTextStyle,
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_right,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () {
-                        _showColorChooseDialog(1);
-                      },
-                      enabled: !_setting.colorWithTheme,
-                    ),
-                  ),
-                  SettingCardItem(
-                    child: ListTile(
                       isThreeLine: false,
                       leading: Icon(Icons.color_lens),
                       title: Text(
@@ -177,10 +101,9 @@ class _DefaultClockSettingState extends State<DefaultClockSetting> {
                       ),
                       trailing: Icon(
                         Icons.arrow_right,
-                        color: Theme.of(context).colorScheme.primary,
                       ),
                       onTap: () {
-                        _showColorChooseDialog(2);
+                        _showColorChooseDialog(0);
                       },
                       enabled: !_setting.colorWithTheme,
                     ),
@@ -208,57 +131,6 @@ class _DefaultClockSettingState extends State<DefaultClockSetting> {
                                 _setting.showDot = newValue;
                               });
                             })),
-                  ),
-                  SettingCardItem(
-                    child: ListTile(
-                      leading: Icon(Icons.font_download),
-                      title: Text(
-                        '字体',
-                        style: _textStyle,
-                      ),
-                      subtitle: Text(
-                        _setting.dFClockFontFamily,
-                        style: _subTextStyle,
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_right,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () {
-                        showCustModalBottomSheet(
-                          height: ScreenUtil().setHeight(800),
-                          context: context,
-                          widget: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("JetBrainsMono:"),
-                              Radio(
-                                value: "JetBrainsMono",
-                                groupValue: _setting.dFClockFontFamily,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _setting.dFClockFontFamily = value;
-                                  });
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              SizedBox(width: 20),
-                              Text("Led:"),
-                              Radio(
-                                value: "Led",
-                                groupValue: _setting.dFClockFontFamily,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _setting.dFClockFontFamily = value;
-                                  });
-                                  Navigator.pop(context);
-                                },
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    ),
                   ),
                   SizedBox(
                     height: ScreenUtil().setHeight(100),

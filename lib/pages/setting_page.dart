@@ -1,12 +1,18 @@
 import 'package:fishingtime/constants.dart';
+import 'package:fishingtime/main.dart';
 import 'package:fishingtime/models/setting.dart';
+import 'package:fishingtime/widgets/cust_alert_dialog.dart';
+import 'package:fishingtime/widgets/cust_modal_bottom_sheet.dart';
 import 'package:fishingtime/widgets/setting_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provide/provide.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+enum Action { Ok, Cancel }
 
 class SettingPage extends StatefulWidget {
   @override
@@ -17,6 +23,10 @@ class _SettingPageState extends State<SettingPage> {
   var _subTitleStyle = Constants.SUB_TITLE_STYLE;
   var _titleTextStyle;
   var version = '0.0';
+  Color pickerColor = Color(0xff443a49);
+  List _colors = new List(2);
+  Setting _setting;
+
   @override
   void initState() {
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
@@ -35,9 +45,55 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _setting = Provide.value<Setting>(context);
+    _setting = Provide.value<Setting>(context);
+    setState(() {
+      _colors[0] = Color(_setting.dFBackgroundColor)
+          .withOpacity(_setting.dFBackgroundOpacity);
+      _colors[1] =
+          Color(_setting.dFTextColor).withOpacity(_setting.dFTextOpacity);
+    });
+    void _showColorChooseDialog(int index) {
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: const Text('Pick a color!'),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: _colors[index],
+              onColorChanged: changeColor,
+              showLabel: true,
+              pickerAreaHeightPercent: 0.8,
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('Got it'),
+              onPressed: () {
+                setState(() {
+                  switch (index) {
+                    case 0:
+                      _setting.dFBackgroundColor = pickerColor.value;
+                      _setting.dFBackgroundOpacity = pickerColor.opacity;
+                      break;
+                    case 1:
+                      _setting.dFTextColor = pickerColor.value;
+                      _setting.dFTextOpacity = pickerColor.opacity;
+                      break;
+                  }
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -83,6 +139,89 @@ class _SettingPageState extends State<SettingPage> {
                         }))),
             SettingCardItem(
               child: new ListTile(
+                leading: Icon(Icons.swap_horiz),
+                title: new Text('强制横屏', style: _titleTextStyle),
+                trailing: new Switch(
+                    value: _setting.isHorizontal,
+                    onChanged: (bool newValue) {
+                      setState(() {
+                        _setting.isHorizontal = newValue;
+                      });
+                      if (newValue) {
+                        SystemChrome.setPreferredOrientations([
+                          DeviceOrientation.landscapeLeft,
+                          DeviceOrientation.landscapeRight
+                        ]);
+                      } else {
+                        SystemChrome.setPreferredOrientations([]);
+                      }
+                    }),
+              ),
+            ),
+            SizedBox(
+              height: ScreenUtil().setHeight(100),
+            ),
+            SettingCardItem(
+              child: ListTile(
+                leading: Icon(Icons.format_color_reset),
+                title: Text(
+                  '颜色跟随主题',
+                  style: _titleTextStyle,
+                ),
+                trailing: new Switch(
+                    value: _setting.colorWithTheme,
+                    onChanged: (bool newValue) {
+                      setState(() {
+                        _setting.colorWithTheme = newValue;
+                      });
+                    }),
+              ),
+            ),
+            SettingCardItem(
+              child: ListTile(
+                leading: Icon(Icons.wallpaper),
+                title: Text(
+                  '背景颜色',
+                  style: _titleTextStyle,
+                ),
+                subtitle: Text(
+                  '#' +
+                      _setting.dFBackgroundColor
+                          .toRadixString(16)
+                          .toUpperCase(),
+                  style: _subTitleStyle,
+                ),
+                trailing: Icon(
+                  Icons.arrow_right,
+                ),
+                onTap: () {
+                  _showColorChooseDialog(0);
+                },
+                enabled: !_setting.colorWithTheme,
+              ),
+            ),
+            SettingCardItem(
+              child: ListTile(
+                leading: Icon(Icons.text_fields),
+                title: Text(
+                  '文字颜色',
+                  style: _titleTextStyle,
+                ),
+                subtitle: Text(
+                  '#' + _setting.dFTextColor.toRadixString(16).toUpperCase(),
+                  style: _subTitleStyle,
+                ),
+                trailing: Icon(
+                  Icons.arrow_right,
+                ),
+                onTap: () {
+                  _showColorChooseDialog(1);
+                },
+                enabled: !_setting.colorWithTheme,
+              ),
+            ),
+            SettingCardItem(
+              child: new ListTile(
                   leading: Icon(Icons.date_range),
                   title: Text('显示日期', style: _titleTextStyle),
                   trailing: new Switch(
@@ -95,32 +234,10 @@ class _SettingPageState extends State<SettingPage> {
             ),
             SettingCardItem(
               child: new ListTile(
-                leading: Icon(Icons.swap_horiz),
-                title: new Text('强制横屏', style: _titleTextStyle),
-                trailing: new Switch(
-                    value: _setting.isHorizontal,
-                    onChanged: (bool newValue) {
-                      setState(() {
-                        _setting.isHorizontal = newValue;
-                      });
-
-                      if (newValue) {
-                        SystemChrome.setPreferredOrientations([
-                          DeviceOrientation.landscapeLeft,
-                          DeviceOrientation.landscapeRight
-                        ]);
-                      } else {
-                        SystemChrome.setPreferredOrientations([]);
-                      }
-                    }),
-              ),
-            ),
-            SettingCardItem(
-              child: new ListTile(
                 leading: Icon(Icons.speaker_notes),
                 title: Text('骚话', style: _titleTextStyle),
                 trailing: SizedBox(
-                  width: ScreenUtil().setWidth(150),
+                  width: ScreenUtil().setWidth(500),
                   child: TextField(
                     keyboardType: TextInputType.text,
                     textAlignVertical: TextAlignVertical.center,
@@ -150,8 +267,68 @@ class _SettingPageState extends State<SettingPage> {
                 ),
               ),
             ),
+            SettingCardItem(
+              child: ListTile(
+                leading: Icon(Icons.font_download),
+                title: Text(
+                  '时钟字体',
+                ),
+                trailing: SizedBox(
+                  width: ScreenUtil().setWidth(500),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text("JetBrainsMono:"),
+                      Radio(
+                        value: "JetBrainsMono",
+                        groupValue: _setting.dFClockFontFamily,
+                        onChanged: (value) {
+                          setState(() {
+                            _setting.dFClockFontFamily = value;
+                          });
+                        },
+                      ),
+                      Text("Led:"),
+                      Radio(
+                        value: "Led",
+                        groupValue: _setting.dFClockFontFamily,
+                        onChanged: (value) {
+                          setState(() {
+                            _setting.dFClockFontFamily = value;
+                          });
+                        },
+                      ),
+                      Text("系统:"),
+                      Radio(
+                        value: "",
+                        groupValue: _setting.dFClockFontFamily,
+                        onChanged: (value) {
+                          setState(() {
+                            _setting.dFClockFontFamily = value;
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
             SizedBox(
               height: ScreenUtil().setHeight(100),
+            ),
+            SettingCardItem(
+              child: new ListTile(
+                leading: Icon(Icons.restore),
+                title: new Text('重置', style: _titleTextStyle),
+                trailing: Icon(Icons.arrow_right),
+                onTap: () {
+                  openAlertDialog(context, "是否重置").then((value) {
+                    if (Action.Ok.toString() == value.toString()) {
+                      RestartWidget.restartApp(context);
+                    }
+                  });
+                },
+              ),
             ),
             SettingCardItem(
               child: Column(

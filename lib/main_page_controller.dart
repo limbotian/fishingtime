@@ -1,4 +1,5 @@
 import 'package:fishingtime/models/setting.dart';
+import 'package:fishingtime/pages/circle_clock.dart';
 import 'package:fishingtime/pages/clock_options_page.dart';
 import 'package:fishingtime/pages/default_clock.dart';
 import 'package:fishingtime/pages/setting_page.dart';
@@ -27,6 +28,9 @@ class _MainPageControllerState extends State<MainPageController> {
     switch (currentClockKey) {
       case DefaultClock.KEY:
         _currentClock = new DefaultClock();
+        break;
+      case CircleClock.KEY:
+        _currentClock = new CircleClock();
         break;
       default:
         _currentClock = new DefaultClock();
