@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class Constants {
   static const IS_INITED_KEY = "IS_INITED";
   static const IS_INITED_VAL = true;
@@ -27,4 +30,16 @@ class Constants {
   static const DEFAULT_CLOCK_COLOR_WITH_THEME_VAL = true;
   static const IS_SHOW_SED_KEY = "IS_SHOW_SED";
   static const IS_SHOW_SED_VAL = false;
+  static const IS_SHOW_DOT_KEY = "IS_SHOW_DOT";
+  static const IS_SHOW_DOT_VAL = true;
+  static const DEFAULT_CLOCK_FONT_FAMILY_KEY = "DEFAULT_CLOCK_FONT_FANMILY";
+  static const DEFAULT_CLOCK_FONT_FAMILY_VALUE = "JetBrainsMono";
+  static const IS_SHOW_DATE_KEY = "IS_SHOW_DATE";
+  static const IS_SHOW_DATE_VAL = true;
+  static const CUST_TEXT_KEY = "CUST_TEXT";
+  static const CUST_TEXT_VAL = "不知天上宫阙，今夕是何年。";
+  static const GITHUB_URL = "https://github.com/limbotian/fishingtime";
+  static const EMAIL = "limbotian@outlook.com";
+
+  static const SUB_TITLE_STYLE = TextStyle(fontSize: 14, color: Colors.grey);
 }

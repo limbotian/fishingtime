@@ -18,6 +18,10 @@ class Setting with ChangeNotifier {
   double _dFCardOpacity;
   bool _isShowSed;
   bool _colorWithTheme;
+  bool _showDot;
+  String _dFClockFontFamily;
+  bool _isShowDate;
+  String _custText;
 
   init(
       {isInit,
@@ -32,7 +36,11 @@ class Setting with ChangeNotifier {
       dFCardOpacity,
       isHorizontal,
       isShowSed,
-      colorWithTheme}) {
+      colorWithTheme,
+      showDot,
+      defaultClockFontFamily,
+      isShowDate,
+      custText}) {
     _isInit = isInit;
     _isFullScreen = isFullScreen;
     _isOLed = isOLed;
@@ -46,6 +54,43 @@ class Setting with ChangeNotifier {
     _isHorizontal = isHorizontal;
     _isShowSed = isShowSed;
     _colorWithTheme = colorWithTheme;
+    _showDot = showDot;
+    _dFClockFontFamily = defaultClockFontFamily;
+    _isShowDate = isShowDate;
+    _custText = custText;
+  }
+
+  bool get isShowDate => _isShowDate;
+
+  set isShowDate(bool value) {
+    _isShowDate = value;
+    SharedPreferencesUtil.saveData<bool>(Constants.IS_SHOW_DATE_KEY, value);
+    notifyListeners();
+  }
+
+  String get custText => _custText;
+
+  set custText(String value) {
+    _custText = value;
+    SharedPreferencesUtil.saveData<String>(Constants.CURRENT_CLOCK_KEY, value);
+    notifyListeners();
+  }
+
+  String get dFClockFontFamily => _dFClockFontFamily;
+
+  set dFClockFontFamily(String value) {
+    _dFClockFontFamily = value;
+    SharedPreferencesUtil.saveData<String>(
+        Constants.DEFAULT_CLOCK_FONT_FAMILY_KEY, value);
+    notifyListeners();
+  }
+
+  bool get showDot => _showDot;
+
+  set showDot(bool value) {
+    _showDot = value;
+    SharedPreferencesUtil.saveData<bool>(Constants.IS_SHOW_DOT_KEY, value);
+    notifyListeners();
   }
 
   bool get colorWithTheme => _colorWithTheme;

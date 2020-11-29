@@ -21,5 +21,10 @@ class SettingUtil {
     sp.setBool(Constants.IS_SHOW_SED_KEY, Constants.IS_SHOW_SED_VAL);
     sp.setBool(Constants.DEFAULT_CLOCK_COLOR_WITH_THEME_KEY,
         Constants.DEFAULT_CLOCK_COLOR_WITH_THEME_VAL);
+    sp.setBool(Constants.IS_SHOW_DOT_KEY, Constants.IS_SHOW_DOT_VAL);
+    sp.setString(Constants.DEFAULT_CLOCK_FONT_FAMILY_KEY,
+        Constants.DEFAULT_CLOCK_FONT_FAMILY_VALUE);
+    sp.setString(Constants.CUST_TEXT_KEY, Constants.CUST_TEXT_VAL);
+    sp.setBool(Constants.IS_SHOW_DATE_KEY, Constants.IS_SHOW_DATE_VAL);
   }
 }

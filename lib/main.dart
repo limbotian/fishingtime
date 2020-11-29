@@ -35,6 +35,11 @@ void runRealApp() async {
   var defaultCo = sp.getDouble(Constants.DEFAULT_CLOCK_CO_KEY);
   var isShowSed = sp.getBool(Constants.IS_SHOW_SED_KEY);
   var colorWithTheme = sp.getBool(Constants.DEFAULT_CLOCK_COLOR_WITH_THEME_KEY);
+  var showDot = sp.getBool(Constants.IS_SHOW_DOT_KEY);
+  var defaultClockFontFamily =
+      sp.getString(Constants.DEFAULT_CLOCK_FONT_FAMILY_KEY);
+  var isShowDate = sp.getBool(Constants.IS_SHOW_DATE_KEY);
+  var custText = sp.getString(Constants.CUST_TEXT_KEY);
 
   setting.init(
       isInit: isInit,
@@ -49,7 +54,11 @@ void runRealApp() async {
       dFCardColor: defaultCc,
       dFCardOpacity: defaultCo,
       isShowSed: isShowSed,
-      colorWithTheme: colorWithTheme);
+      colorWithTheme: colorWithTheme,
+      showDot: showDot,
+      defaultClockFontFamily: defaultClockFontFamily,
+      isShowDate: isShowDate,
+      custText: custText);
   var providers = Providers();
   providers..provide(Provider<Setting>.value(setting));
 

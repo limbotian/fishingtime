@@ -49,8 +49,6 @@ class _MainPageControllerState extends State<MainPageController> {
     return Stack(
       children: [
         Container(
-          height: double.infinity,
-          width: double.infinity,
           child: _getCurrentClock(_setting.currentClockKey),
         ),
         GestureDetector(
@@ -65,14 +63,6 @@ class _MainPageControllerState extends State<MainPageController> {
               await Navigator.push(context, CustomRouteSlideRTL(SettingPage()));
             }
             setState(() {});
-          },
-          onTap: () {
-            if (_setting.isInit == null || !_setting.isInit) {
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('滑动有惊喜！'),
-              ));
-              _setting.isInit = true;
-            }
           },
         ),
       ],
