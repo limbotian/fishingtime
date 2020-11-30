@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingUtil {
   static void initDefaultSetting(SharedPreferences sp) {
-    //sp.setBool(Constants.IS_INITED_KEY, Constants.IS_INITED_VAL);
+    sp.setBool(Constants.IS_INITED_KEY, Constants.IS_INITED_VAL);
     sp.setBool(Constants.IS_FULL_SCREEN_KEY, Constants.IS_FULL_SCREEN_VAL);
     sp.setBool(Constants.IS_OLED_KEY, Constants.IS_OLED_VAL);
     sp.setBool(Constants.IS_HORIZONTAL_KEY, Constants.IS_HORIZONTAL_VAL);
